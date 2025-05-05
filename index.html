@@ -55,15 +55,17 @@
       width: 40px;
       background: white;
       position: relative;
+      display: inline-block;
       z-index: 1;
     }
     .key.black {
       background: black;
       height: 100px;
       width: 25px;
-      position: absolute;
       margin-left: -12.5px;
+      margin-right: -12.5px;
       z-index: 2;
+      position: relative;
     }
     .key.highlight {
       background: #4caf50 !important;
@@ -74,6 +76,10 @@
       width: 100%;
       text-align: center;
       font-size: 0.7rem;
+      color: black;
+    }
+    .key.black .key-label {
+      color: white;
     }
     .octave {
       display: flex;
@@ -134,10 +140,32 @@
 
     <div class="piano-container" id="piano">
       <div class="octave">
-        ${pianoKeysHTML(1)}
+        <div class="key"><div class="key-label">C</div></div>
+        <div class="key black"><div class="key-label">C#</div></div>
+        <div class="key"><div class="key-label">D</div></div>
+        <div class="key black"><div class="key-label">D#</div></div>
+        <div class="key"><div class="key-label">E</div></div>
+        <div class="key"><div class="key-label">F</div></div>
+        <div class="key black"><div class="key-label">F#</div></div>
+        <div class="key"><div class="key-label">G</div></div>
+        <div class="key black"><div class="key-label">G#</div></div>
+        <div class="key"><div class="key-label">A</div></div>
+        <div class="key black"><div class="key-label">A#</div></div>
+        <div class="key"><div class="key-label">B</div></div>
       </div>
       <div class="octave">
-        ${pianoKeysHTML(2)}
+        <div class="key"><div class="key-label">C</div></div>
+        <div class="key black"><div class="key-label">C#</div></div>
+        <div class="key"><div class="key-label">D</div></div>
+        <div class="key black"><div class="key-label">D#</div></div>
+        <div class="key"><div class="key-label">E</div></div>
+        <div class="key"><div class="key-label">F</div></div>
+        <div class="key black"><div class="key-label">F#</div></div>
+        <div class="key"><div class="key-label">G</div></div>
+        <div class="key black"><div class="key-label">G#</div></div>
+        <div class="key"><div class="key-label">A</div></div>
+        <div class="key black"><div class="key-label">A#</div></div>
+        <div class="key"><div class="key-label">B</div></div>
       </div>
     </div>
   </div>
@@ -162,35 +190,11 @@
     function startApp() {
       document.getElementById('home').classList.add('hidden');
       document.getElementById('app').classList.remove('hidden');
-      renderPiano();
     }
 
     function goBack() {
       document.getElementById('app').classList.add('hidden');
       document.getElementById('home').classList.remove('hidden');
-    }
-
-    function renderPiano() {
-      const pianoContainer = document.getElementById("piano");
-      pianoContainer.innerHTML = "";
-      for (let octave = 0; octave < 2; octave++) {
-        const octaveDiv = document.createElement("div");
-        octaveDiv.classList.add("octave");
-        pianoKeys.forEach((note, index) => {
-          const keyDiv = document.createElement("div");
-          keyDiv.classList.add("key");
-          if (note.includes("#")) {
-            keyDiv.classList.add("black");
-            keyDiv.style.left = `${index * 40 - 10}px`;
-          }
-          const label = document.createElement("div");
-          label.classList.add("key-label");
-          label.innerText = note;
-          keyDiv.appendChild(label);
-          octaveDiv.appendChild(keyDiv);
-        });
-        pianoContainer.appendChild(octaveDiv);
-      }
     }
 
     function updateChord() {
@@ -221,7 +225,8 @@
         selected.forEach(type => {
           const intervals = chordFormulas[type] || [];
           intervals.forEach(n => {
-            finalNotes.add((index + n) % 12);
+            const noteIndex = (index + n) % 12;
+            finalNotes.add(noteIndex);
           });
         });
 
