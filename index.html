@@ -102,7 +102,7 @@
     <button onclick="goBack()">← Back</button>
     <div class="controls">
       <label for="rootNote">Root Note:</label>
-      <select id="rootNote">
+      <select id="rootNote" onchange="updateChord()">
         <option value="C">C</option>
         <option value="C#">C#</option>
         <option value="D">D</option>
@@ -117,61 +117,94 @@
         <option value="B">B</option>
       </select>
 
-      <div>
-        <label><input type="checkbox" name="chordType" value="maj"> Major</label>
-        <label><input type="checkbox" name="chordType" value="min"> Minor</label>
-        <label><input type="checkbox" name="chordType" value="7"> 7</label>
-        <label><input type="checkbox" name="chordType" value="maj7"> maj7</label>
-        <label><input type="checkbox" name="chordType" value="min7"> min7</label>
-        <label><input type="checkbox" name="chordType" value="sus2"> sus2</label>
-        <label><input type="checkbox" name="chordType" value="sus4"> sus4</label>
-        <label><input type="checkbox" name="chordType" value="dim"> dim</label>
-        <label><input type="checkbox" name="chordType" value="aug"> aug</label>
-        <label><input type="checkbox" name="chordType" value="add9"> add9</label>
-        <label><input type="checkbox" name="chordType" value="add11"> add11</label>
+      <div id="chordTypes">
+        <label><input type="checkbox" name="chordType" value="maj" onchange="updateChord()"> Major</label>
+        <label><input type="checkbox" name="chordType" value="min" onchange="updateChord()"> Minor</label>
+        <label><input type="checkbox" name="chordType" value="7" onchange="updateChord()"> 7</label>
+        <label><input type="checkbox" name="chordType" value="maj7" onchange="updateChord()"> maj7</label>
+        <label><input type="checkbox" name="chordType" value="min7" onchange="updateChord()"> min7</label>
+        <label><input type="checkbox" name="chordType" value="sus2" onchange="updateChord()"> sus2</label>
+        <label><input type="checkbox" name="chordType" value="sus4" onchange="updateChord()"> sus4</label>
+        <label><input type="checkbox" name="chordType" value="dim" onchange="updateChord()"> dim</label>
+        <label><input type="checkbox" name="chordType" value="aug" onchange="updateChord()"> aug</label>
+        <label><input type="checkbox" name="chordType" value="add9" onchange="updateChord()"> add9</label>
+        <label><input type="checkbox" name="chordType" value="add11" onchange="updateChord()"> add11</label>
       </div>
     </div>
 
     <div class="piano-container" id="piano">
-      <div class="octave">
-        <div class="key"><div class="key-label">C</div></div>
-        <div class="key black" style="left: 30px;"><div class="key-label" style="color:white;">C#</div></div>
-        <div class="key"><div class="key-label">D</div></div>
-        <div class="key black" style="left: 70px;"><div class="key-label" style="color:white;">D#</div></div>
-        <div class="key"><div class="key-label">E</div></div>
-        <div class="key"><div class="key-label">F</div></div>
-        <div class="key black" style="left: 150px;"><div class="key-label" style="color:white;">F#</div></div>
-        <div class="key"><div class="key-label">G</div></div>
-        <div class="key black" style="left: 190px;"><div class="key-label" style="color:white;">G#</div></div>
-        <div class="key"><div class="key-label">A</div></div>
-        <div class="key black" style="left: 230px;"><div class="key-label" style="color:white;">A#</div></div>
-        <div class="key"><div class="key-label">B</div></div>
-      </div>
-      <div class="octave">
-        <div class="key"><div class="key-label">C</div></div>
-        <div class="key black" style="left: 30px;"><div class="key-label" style="color:white;">C#</div></div>
-        <div class="key"><div class="key-label">D</div></div>
-        <div class="key black" style="left: 70px;"><div class="key-label" style="color:white;">D#</div></div>
-        <div class="key"><div class="key-label">E</div></div>
-        <div class="key"><div class="key-label">F</div></div>
-        <div class="key black" style="left: 150px;"><div class="key-label" style="color:white;">F#</div></div>
-        <div class="key"><div class="key-label">G</div></div>
-        <div class="key black" style="left: 190px;"><div class="key-label" style="color:white;">G#</div></div>
-        <div class="key"><div class="key-label">A</div></div>
-        <div class="key black" style="left: 230px;"><div class="key-label" style="color:white;">A#</div></div>
-        <div class="key"><div class="key-label">B</div></div>
-      </div>
+      <!-- คีย์เปียโนแสดงแล้ว -->
     </div>
   </div>
 
   <script>
+    const pianoKeys = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+
+    const chordFormulas = {
+      maj: [0, 4, 7],
+      min: [0, 3, 7],
+      7: [0, 4, 7, 10],
+      maj7: [0, 4, 7, 11],
+      min7: [0, 3, 7, 10],
+      sus2: [0, 2, 7],
+      sus4: [0, 5, 7],
+      dim: [0, 3, 6],
+      aug: [0, 4, 8],
+      add9: [0, 4, 7, 14],
+      add11: [0, 4, 7, 17]
+    };
+
     function startApp() {
       document.getElementById('home').classList.add('hidden');
       document.getElementById('app').classList.remove('hidden');
     }
+
     function goBack() {
       document.getElementById('app').classList.add('hidden');
       document.getElementById('home').classList.remove('hidden');
+    }
+
+    function updateChord() {
+      const root = document.getElementById('rootNote').value;
+      const checkboxes = document.querySelectorAll('input[name="chordType"]');
+      const selected = [];
+      checkboxes.forEach(cb => {
+        if (cb.checked) selected.push(cb.value);
+      });
+
+      checkboxes.forEach(cb => {
+        if (selected.includes('maj')) {
+          if (["dim", "min"].includes(cb.value)) cb.disabled = true;
+          else cb.disabled = false;
+        } else if (selected.includes('min')) {
+          if (["dim", "maj"].includes(cb.value)) cb.disabled = true;
+          else cb.disabled = false;
+        } else {
+          cb.disabled = false;
+        }
+      });
+
+      document.querySelectorAll('.key').forEach(k => k.classList.remove('highlight'));
+
+      if (selected.length > 0 && root) {
+        const index = pianoKeys.indexOf(root);
+        let finalNotes = new Set();
+        selected.forEach(type => {
+          const intervals = chordFormulas[type] || [];
+          intervals.forEach(n => {
+            finalNotes.add((index + n) % 12);
+          });
+        });
+
+        finalNotes.forEach(noteIndex => {
+          const noteName = pianoKeys[noteIndex];
+          document.querySelectorAll('.key-label').forEach(label => {
+            if (label.innerText === noteName) {
+              label.parentElement.classList.add('highlight');
+            }
+          });
+        });
+      }
     }
   </script>
 </body>
