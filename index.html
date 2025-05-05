@@ -133,7 +133,12 @@
     </div>
 
     <div class="piano-container" id="piano">
-      <!-- คีย์เปียโนแสดงแล้ว -->
+      <div class="octave">
+        ${pianoKeysHTML(1)}
+      </div>
+      <div class="octave">
+        ${pianoKeysHTML(2)}
+      </div>
     </div>
   </div>
 
@@ -157,11 +162,35 @@
     function startApp() {
       document.getElementById('home').classList.add('hidden');
       document.getElementById('app').classList.remove('hidden');
+      renderPiano();
     }
 
     function goBack() {
       document.getElementById('app').classList.add('hidden');
       document.getElementById('home').classList.remove('hidden');
+    }
+
+    function renderPiano() {
+      const pianoContainer = document.getElementById("piano");
+      pianoContainer.innerHTML = "";
+      for (let octave = 0; octave < 2; octave++) {
+        const octaveDiv = document.createElement("div");
+        octaveDiv.classList.add("octave");
+        pianoKeys.forEach((note, index) => {
+          const keyDiv = document.createElement("div");
+          keyDiv.classList.add("key");
+          if (note.includes("#")) {
+            keyDiv.classList.add("black");
+            keyDiv.style.left = `${index * 40 - 10}px`;
+          }
+          const label = document.createElement("div");
+          label.classList.add("key-label");
+          label.innerText = note;
+          keyDiv.appendChild(label);
+          octaveDiv.appendChild(keyDiv);
+        });
+        pianoContainer.appendChild(octaveDiv);
+      }
     }
 
     function updateChord() {
