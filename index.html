@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Piano Chord Viewer</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+    }
+    header {
+      width: 100%;
+      padding: 1rem;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+    }
+    .piano-container {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      margin-top: 2rem;
+    }
+    .key {
+      border: 1px solid #000;
+      height: 150px;
+      width: 40px;
+      background: white;
+      position: relative;
+      z-index: 1;
+    }
+    .key.black {
+      background: black;
+      height: 100px;
+      width: 25px;
+      position: absolute;
+      margin-left: -12.5px;
+      z-index: 2;
+    }
+    .key.highlight {
+      background: #4caf50 !important;
+    }
+    .key-label {
+      position: absolute;
+      bottom: 5px;
+      width: 100%;
+      text-align: center;
+      font-size: 0.7rem;
+    }
+    .octave {
+      display: flex;
+      position: relative;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Piano Chord Viewer</h1>
+  </header>
+
+  <div class="piano-container" id="piano">
+    <!-- Octave 1 -->
+    <div class="octave">
+      <div class="key"><div class="key-label">C</div></div>
+      <div class="key black" style="left: 30px;"><div class="key-label" style="color:white;">C#</div></div>
+      <div class="key"><div class="key-label">D</div></div>
+      <div class="key black" style="left: 70px;"><div class="key-label" style="color:white;">D#</div></div>
+      <div class="key"><div class="key-label">E</div></div>
+      <div class="key"><div class="key-label">F</div></div>
+      <div class="key black" style="left: 150px;"><div class="key-label" style="color:white;">F#</div></div>
+      <div class="key"><div class="key-label">G</div></div>
+      <div class="key black" style="left: 190px;"><div class="key-label" style="color:white;">G#</div></div>
+      <div class="key"><div class="key-label">A</div></div>
+      <div class="key black" style="left: 230px;"><div class="key-label" style="color:white;">A#</div></div>
+      <div class="key"><div class="key-label">B</div></div>
+    </div>
+    <!-- Octave 2 (repeat) -->
+    <div class="octave">
+      <div class="key"><div class="key-label">C</div></div>
+      <div class="key black" style="left: 30px;"><div class="key-label" style="color:white;">C#</div></div>
+      <div class="key"><div class="key-label">D</div></div>
+      <div class="key black" style="left: 70px;"><div class="key-label" style="color:white;">D#</div></div>
+      <div class="key"><div class="key-label">E</div></div>
+      <div class="key"><div class="key-label">F</div></div>
+      <div class="key black" style="left: 150px;"><div class="key-label" style="color:white;">F#</div></div>
+      <div class="key"><div class="key-label">G</div></div>
+      <div class="key black" style="left: 190px;"><div class="key-label" style="color:white;">G#</div></div>
+      <div class="key"><div class="key-label">A</div></div>
+      <div class="key black" style="left: 230px;"><div class="key-label" style="color:white;">A#</div></div>
+      <div class="key"><div class="key-label">B</div></div>
+    </div>
+  </div>
+</body>
+</html>
